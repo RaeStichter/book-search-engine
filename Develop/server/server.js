@@ -6,7 +6,7 @@ const path = require('path');
 
 // import typeDefs and resolvers and middleware
 //const { typeDefs, resolvers } = require('./schemas');
-//const { authMiddleware } = require('./utils/auth');
+const { authMiddleware } = require('./utils/auth');
 const db = require('./config/connection');
 // this will be replaced with the schemas
 const routes = require('./routes');
