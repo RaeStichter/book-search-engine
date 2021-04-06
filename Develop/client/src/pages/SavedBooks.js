@@ -1,28 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
 //import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
-// import functions needed with refactor
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { QUERY_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 
 const SavedBooks = () => {
-  // use query hook to make query request for me
+
+  // const [userData, setUserData] = useState({}); 
+
   const { loading, data } = useQuery(QUERY_ME);
-  // use object destructing to extract 'data' from the 'useQuery Hook
+
   const userData = data?.me || {};
-  console.log(userData);
 
-  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
-
-  //const [userData, setUserData] = useState({});
+  const [removeBook, {error}] = useMutation(REMOVE_BOOK);
 
   // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData).length;
+  //const userDataLength = Object.keys(userData).length;
 
   // useEffect(() => {
   //   const getUserData = async () => {
@@ -49,6 +47,8 @@ const SavedBooks = () => {
   //   getUserData();
   // }, [userDataLength]);
 
+
+
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -58,26 +58,18 @@ const SavedBooks = () => {
     }
 
     try {
-      // const response = await deleteBook(bookId, token);
-      //const { data } = 
-      //await removeBook( { variables: { bookId } });
-      await removeBook( {variables: { bookId: bookId} });
-
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
-
-      // const updatedUser = await response.json();
-      // setUserData(updatedUser);
+      await removeBook({
+        variables: { bookId: bookId },
+      })      
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
-    } catch (err) {
-      console.error(err);
+    } catch (e) {
+      console.error(e);
     }
   };
 
   // if data isn't here yet, say so
-  if (!userDataLength) {
+  if (loading) {
     return <h2>LOADING...</h2>;
   }
 
@@ -107,6 +99,7 @@ const SavedBooks = () => {
                     Delete this Book!
                   </Button>
                 </Card.Body>
+                {error && <div>Deletion Failed</div>}
               </Card>
             );
           })}
