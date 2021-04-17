@@ -1,7 +1,7 @@
 {
   "name": "googlebooks-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "_____________________________\r Do you love to read but aren't sure what your next book will be?  Checkout the Book Search Engine!  This applicaiton utilizes Google Books API to search for booksed based on user search input.  When you are logged into the application, you have the ability to save books to your profile and look them up later.",
   "main": "server/server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
@@ -23,5 +23,4 @@
   "devDependencies": {
     "concurrently": "^5.2.0"
   }
-  
 }
